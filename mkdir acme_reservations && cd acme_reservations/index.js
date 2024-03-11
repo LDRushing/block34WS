@@ -18,9 +18,10 @@ CREATE TABLE restaurants(
 );
 CREATE TABLE reservations(
   id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id) NOT NULL,
-  place_id UUID REFERENCES places(id) NOT NULL,
-  departure_date DATE
+  date DATE NOT NULL
+  customer_id UUID REFERENCES customers(id) NOT NULL,
+  restaurant_id UUID REFERENCES restaurants(id) NOT NULL,
+  party_count INTERGER NOT NULL 
 );
   `;
   await client.query(SQL);
@@ -44,7 +45,7 @@ const createRestaurant = async(name)=> {
 
 const createReservation = async({ place_id, user_id, departure_date})=> {
   const SQL = `
-    INSERT INTO reservation(id, restaurant_id, user_id, reservation_id) VALUES($1, $2, $3, $4) RETURNING *
+    INSERT INTO reservation(id, restaurant_id, party_count, customer_id, reservation_id) VALUES($1, $2, $3, $4) RETURNING *
   `;
   const response = await client.query(SQL, [uuid.v4(), place_id, user_id, departure_date]);
   return response.rows[0];
@@ -79,7 +80,7 @@ FROM reservations
 
 const destroyReservation = async(id)=> {
   const SQL = `
-DELETE FROM vacations
+DELETE FROM reservations
 where id = $1
   `;
   await client.query(SQL, [id]);
