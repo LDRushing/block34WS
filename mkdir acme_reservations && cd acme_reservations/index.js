@@ -86,9 +86,10 @@ where id = $1
   await client.query(SQL, [id]);
 };
 
-app.get('/', (req, res) => {
-  throw new Error('BROKEN') // Express will catch this on its own.
-})
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(err.status || 500).send({ error: err.message || err });
+});
 
 module.exports = {
   client,
