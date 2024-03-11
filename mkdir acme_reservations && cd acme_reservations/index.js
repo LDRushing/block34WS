@@ -86,6 +86,10 @@ where id = $1
   await client.query(SQL, [id]);
 };
 
+app.get('/', (req, res) => {
+  throw new Error('BROKEN') // Express will catch this on its own.
+})
+
 module.exports = {
   client,
   createTables,
