@@ -60,7 +60,7 @@ const init = async () => {
   console.log("connected to database");
   await createTables();
   console.log("tables created");
-  const [frenchie, kitty, chula, leMadeleine, redRobin, oliveGarden, ihop] =
+  const [frenchie, kitty, chula, tiger, leMadeleine, redRobin, oliveGarden, ihop] =
     await Promise.all([
       createCustomer("Frenchie"),
       createCustomer("Kitty"),
@@ -101,7 +101,7 @@ const init = async () => {
   console.log(reservation);
   await destroyReservation(reservations[0].id);
   console.log(await fetchReservation());
-  
+
   const port = process.env.PORT || 3000;
   app.listen(port, () => console.log(`listening on port ${port}`));
 };
