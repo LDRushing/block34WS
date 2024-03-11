@@ -65,7 +65,7 @@ const init = async () => {
       createCustomer("Frenchie"),
       createCustomer("Kitty"),
       createCustomer("Chula"),
-      createCustomer("Tiger"),
+      createCustomer("Tanya"),
       createRestaurant("Le Madeleine"),
       createRestaurant("Red Robin"),
       createRestaurant("Olive Garden"),
@@ -79,22 +79,26 @@ const init = async () => {
     createReservation({
       customer_id: kitty.id,
       place_id: redRobin.id,
-      reservation_id: "04/01/2024",
+      reservation_id: "1",
+      party_count: "2"
     }),
     createReservation({
       customer_id: chula.id,
       place_id: oliveGarden.id,
-      reservation_id: "04/15/2024",
+      reservation_id: "2",
+      party_count: "2"
     }),
     createReservation({
-      customer_id: tiger.id,
+      customer_id: tanya.id,
       place_id: ihop.id,
-      reservation_id: "07/04/2024",
+      reservation_id: "3",
+      party_count: "5"
     }),
     createReservation({
       customer_id: frenchie.id,
       place_id: leMadeleine.id,
-      reservation_id: "10/31/2024",
+      reservation_id: "4",
+      party_count: "3"
     }),
   ]);
   const reservations = await fetchReservation();
