@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.get("/api/customers", async (req, res, next) => {
   try {
-    res.send(await fetchCustomer());
+    res.send(await fetchCustomers());
   } catch (ex) {
     next(ex);
   }
@@ -24,7 +24,7 @@ app.get("/api/customers", async (req, res, next) => {
 
 app.get("/api/restaurants", async (req, res, next) => {
   try {
-    res.send(await fetchRestaurant());
+    res.send(await fetchRestaurants());
   } catch (ex) {
     next(ex);
   }
