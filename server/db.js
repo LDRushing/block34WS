@@ -1,6 +1,8 @@
 const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL || 'postgres://localhost/acme_restaurants_db');
 const uuid = require('uuid');
+const express = require('express');
+const app = express();
 
 const createTables = async()=> {
   const SQL = `
@@ -18,10 +20,10 @@ CREATE TABLE restaurants(
 );
 CREATE TABLE reservations(
   id UUID PRIMARY KEY,
-  date DATE NOT NULL
+  date DATE DEFAULT NOW(),
   customer_id UUID REFERENCES customers(id) NOT NULL,
   restaurant_id UUID REFERENCES restaurants(id) NOT NULL,
-  party_count INTERGER NOT NULL 
+  party_count INTEGER NOT NULL 
 );
   `;
   await client.query(SQL);
@@ -43,15 +45,15 @@ const createRestaurant = async(name)=> {
   return response.rows[0];
 };
 
-const createReservation = async({ place_id, user_id, departure_date})=> {
+const createReservation = async({ customer_id, restaurant_id, party_count})=> {
   const SQL = `
-    INSERT INTO reservation(id, restaurant_id, party_count, customer_id, reservation_id) VALUES($1, $2, $3, $4) RETURNING *
+    INSERT INTO reservations(id, customer_id, restaurant_id, party_count) VALUES($1, $2, $3) RETURNING *
   `;
-  const response = await client.query(SQL, [uuid.v4(), place_id, user_id, departure_date]);
+  const response = await client.query(SQL, [uuid.v4(), customer_id, restaurant_id, party_count]);
   return response.rows[0];
 };
 
-const fetchCustomer = async()=> {
+const fetchCustomers = async()=> {
   const SQL = `
 SELECT *
 FROM customers
@@ -60,7 +62,7 @@ FROM customers
   return response.rows;
 };
 
-const fetchRestaurant = async()=> {
+const fetchRestaurants = async()=> {
   const SQL = `
 SELECT *
 FROM restaurants
@@ -86,7 +88,7 @@ where id = $1
   await client.query(SQL, [id]);
 };
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => { //error-handling 
   console.log(err);
   res.status(err.status || 500).send({ error: err.message || err });
 });
@@ -96,8 +98,8 @@ module.exports = {
   createTables,
   createCustomer,
   createRestaurant,
-  fetchCustomer,
-  fetchRestaurant,
+  fetchCustomers,
+  fetchRestaurants,
   createReservation,
   fetchReservation,
   destroyReservation

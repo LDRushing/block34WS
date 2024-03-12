@@ -1,14 +1,14 @@
-//server/db.js
+//server/index.js
 const {
   client,
   createTables,
   createCustomer,
   createRestaurant,
-  fetchCustomer,
-  fetchRestaurant,
+  fetchCustomers,
+  fetchRestaurants,
   createReservation,
   fetchReservation,
-  destroyReservation,
+  destroyReservation
 } = require("./db");
 const express = require("express");
 const app = express();
@@ -60,7 +60,7 @@ const init = async () => {
   console.log("connected to database");
   await createTables();
   console.log("tables created");
-  const [frenchie, kitty, chula, tiger, leMadeleine, redRobin, oliveGarden, ihop] =
+  const [frenchie, kitty, chula, tanya, leMadeleine, redRobin, oliveGarden, ihop] =
     await Promise.all([
       createCustomer("Frenchie"),
       createCustomer("Kitty"),
@@ -73,32 +73,28 @@ const init = async () => {
     ]);
   console.log(`Frenchie has an id of ${frenchie.id}`);
   console.log(`Le Madeleine has an id of ${leMadeleine.id}`);
-  console.log(await fetchUsers());
-  console.log(await fetchPlaces());
+  console.log(await fetchCustomers());
+  console.log(await fetchRestaurants());
   await Promise.all([
     createReservation({
       customer_id: kitty.id,
-      place_id: redRobin.id,
-      reservation_id: "1",
-      party_count: "2"
+      restaurant_id: redRobin.id,
+      party_count: 2
     }),
     createReservation({
       customer_id: chula.id,
-      place_id: oliveGarden.id,
-      reservation_id: "2",
-      party_count: "2"
+      restaurant_id: oliveGarden.id,
+      party_count: 2
     }),
     createReservation({
       customer_id: tanya.id,
-      place_id: ihop.id,
-      reservation_id: "3",
-      party_count: "5"
+      restaurant_id: ihop.id,
+      party_count: 5
     }),
     createReservation({
       customer_id: frenchie.id,
-      place_id: leMadeleine.id,
-      reservation_id: "4",
-      party_count: "3"
+      restaurant_id: leMadeleine.id,
+      party_count: 3
     }),
   ]);
   const reservations = await fetchReservation();
