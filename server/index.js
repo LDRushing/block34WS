@@ -98,7 +98,7 @@ const init = async () => {
     }),
   ]);
   const reservations = await fetchReservation();
-  console.log(reservation);
+  console.log(reservations);
   await destroyReservation(reservations[0].id);
   console.log(await fetchReservation());
 

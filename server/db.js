@@ -47,7 +47,7 @@ const createRestaurant = async(name)=> {
 
 const createReservation = async({ customer_id, restaurant_id, party_count})=> {
   const SQL = `
-    INSERT INTO reservations(id, customer_id, restaurant_id, party_count) VALUES($1, $2, $3) RETURNING *
+    INSERT INTO reservations(id, customer_id, restaurant_id, party_count) VALUES($1, $2, $3, $4) RETURNING *
   `;
   const response = await client.query(SQL, [uuid.v4(), customer_id, restaurant_id, party_count]);
   return response.rows[0];
@@ -93,8 +93,8 @@ app.use((err, req, res, next) => { //error-handling
   res.status(err.status || 500).send({ error: err.message || err });
 });
 
-module.exports = {
-  client,
+module.exports = { 
+  client, 
   createTables,
   createCustomer,
   createRestaurant,
